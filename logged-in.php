@@ -2,6 +2,13 @@
 session_start();
 require_once('includes/new-connection.php');
 
+// Force someone back to the home page if the
+// first name and last name session variables aren't set
+if(!isset($_SESSION['first_name']) && !isset($_SESSION['last_name']))
+{
+    header('Location: index.php');
+}
+
 // Set default timezone as Los Angeles, CA, USA
 date_default_timezone_set('America/Los_Angeles');
 
@@ -15,7 +22,7 @@ $users = fetch($select_query);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Logged In - Login and Registration Coding Dojo Assignment</title>
+    <title>Registration Successful</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css"/>
 </head>
 <body>
