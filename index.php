@@ -38,6 +38,8 @@ require_once('includes/new-connection.php');
                 echo "<p>$error</p>";
             }
 
+            unset($_SESSION['errors']);
+
         }
         ?>
 
