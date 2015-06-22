@@ -105,6 +105,23 @@ function register_user($post, $get_connection)
 
 }
 
+// Function below checks if someone has already registered AND
+// passes in the $connect variable to connect to the database
+function login_user($post, $get_connection)
+{
+
+    // Set variables to insert into MySQL queries
+    $email_sec = mysqli_real_escape_string($get_connection, $post['email']);
+
+    // Escape and encrypt the inputted password and
+    // DON'T SET IT to a session variable
+    $password_sec = mysqli_real_escape_string($get_connection, md5($post['password']));
+
+    $check_email_password_query = "SELECT * FROM users WHERE users.email = '$email_sec' AND users.password = '$password_sec'";
+
+
+}
+
 
 // If registered form submitted call the register_user function with
 // $_POST as the argument AND pass in the $connection variable to run MySQL queries
@@ -113,7 +130,10 @@ if(isset($_POST['action']) && $_POST['action'] == 'register')
     register_user($_POST, $connection);
 }
 
-
+if(isset($_POST['action']) && $_POST['action'] == 'login')
+{
+    login_user($_POST, $connection);
+}
 
 
 
