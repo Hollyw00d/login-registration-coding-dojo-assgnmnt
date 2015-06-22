@@ -3,8 +3,9 @@ session_start();
 require_once('new-connection.php');
 
 // Function below checks for errors on register form and
-// if not errors submits
-function register_user($post)
+// if not errors submits AND
+// $get_connection refers to the $connection of new-connection.php to connect to MySQL
+function register_user($post, $get_connection)
 {
     // Create empty errors array
     $_SESSION['errors'] = [];
@@ -65,7 +66,8 @@ function register_user($post)
     // Display errors if $errors array is NOT null
     if($_SESSION['errors'] != NULL)
     {
-        header('Location: ../index.php');
+
+        header('Location: index.php');
     }
 
     // If no errors redirect to logged-in.php, input form fields into database, and
@@ -81,49 +83,41 @@ function register_user($post)
             $_SESSION['last_name'] = $post['last_name'];
             $_SESSION['email'] = $post['email'];
 
+//            var_dump($get_connection);
+//            die();
+
+
+
+
+
 
             // Set variables to insert into MySQL queries
-            $first_name_sec = mysqli_real_escape_string($connection, $post['first_name']);
-            $last_name_sec = mysqli_real_escape_string($connection, $post['last_name']);
-            $email_sec = mysqli_real_escape_string($connection, $post['email']);
+            $first_name_sec = mysqli_real_escape_string($get_connection, $post['first_name']);
+            $last_name_sec = mysqli_real_escape_string($get_connection, $post['last_name']);
+            $email_sec = mysqli_real_escape_string($get_connection, $post['email']);
 
             // Escape and encrypt the inputted password and
             // DON'T SET IT to a session variable
-            $password_sec = mysqli_real_escape_string($connection, md5($post['password']));
+            $password_sec = mysqli_real_escape_string($get_connection, md5($post['password']));
 
+            // Insert user MySQL query
+            $insert_user = "INSERT INTO users(first_name, last_name, email, password, created_at, updated_at) VALUES ('$first_name_sec', '$last_name_sec', '$email_sec', '$password_sec', NOW(), NOW())";
 
+            $execute_insert_user = run_mysql_query($insert_user);
 
             header('Location: ../logged-in.php');
 
         }
 
-
-//
-//        if(!isset($_SESSION['first_name']) && !isset($_SESSION['last_name']))
-//        {
-//
-
-//
-//            // Insert user MySQL query
-//            $insert_user = "INSERT INTO users(first_name, last_name, email, password, created_at, updated_at) VALUES ('{$_SESSION['first_name']}', '{$_SESSION['last_name']}', '{$_SESSION['email']}', '$password_sec', NOW(), NOW())";
-//
-//            // Execute insert user MySQL query
-//            $execute_insert_user = run_mysql_query($insert_user);
-//
-//            header('Location: ../logged-in.php');
-//
-//        }
-
     }
-
 
 }
 
 // If registered form submitted call the register_user function with
-// $_POST as the argument
+// $_POST as the argument AND pass in the $connection variable to run MySQL queries
 if(isset($_POST['action']) && $_POST['action'] == 'register')
 {
-    register_user($_POST);
+    register_user($_POST, $connection);
 }
 
 

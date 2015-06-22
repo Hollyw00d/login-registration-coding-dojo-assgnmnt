@@ -6,7 +6,7 @@ require_once('includes/new-connection.php');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Registration - Login and Registration Coding Dojo Assignment</title>
+    <title>Registration and Login - Coding Dojo Assignment</title>
     <link rel="stylesheet" type="text/css" href="css/styles.css"/>
 </head>
 <body>
