@@ -2,21 +2,14 @@
 session_start();
 require_once('includes/new-connection.php');
 
-// Force someone back to the home page if the
-// first name and last name session variables aren't set
-if(!isset($_SESSION['first_name']) && !isset($_SESSION['last_name']))
-{
-    header('Location: index.php');
-}
-
 // Set default timezone as Los Angeles, CA, USA
 date_default_timezone_set('America/Los_Angeles');
 
 // Select query to display all data from users table
 $select_query = "SELECT * FROM users";
-
 // Fetch function to display all data
 $users = fetch($select_query);
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -31,7 +24,18 @@ $users = fetch($select_query);
 
     <h1>Logged In<a class="log-out" href="includes/reset.php">Log Out</a></h1>
 
-    <p><strong>Hello, <?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>. Thanks for registering!</strong></p>
+    <?php
+    if(isset($_SESSION['first_name']) || $_SESSION['last_name']) {
+    ?>
+        <p><strong>Hello, <?php echo $_SESSION['first_name'] . ' ' . $_SESSION['last_name'] ?>. Thanks for registering!</strong></p>
+    <?php
+    }
+    elseif(isset($_SESSION['login_success'])) {
+    ?>
+        <p>You've logged in! Welcome back <?php echo $_SESSION['first_name_login'] . ' ' . $_SESSION['last_name_login']; ?>.</p>
+    <?php
+    }
+    ?>
 
     <h2>Record of People Registered</h2>
 

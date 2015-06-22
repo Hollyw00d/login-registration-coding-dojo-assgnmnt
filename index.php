@@ -27,7 +27,7 @@ require_once('includes/new-connection.php');
 
     </form>
 
-    <div id="errors">
+    <div class="errors">
 
         <?php
         if(isset($_SESSION['errors']))
@@ -55,6 +55,26 @@ require_once('includes/new-connection.php');
         <p><input name="submit" type="submit" value="Submit"/></p>
 
     </form>
+
+    <div class="errors">
+
+        <?php
+        if(isset($_SESSION['login_errors']))
+        {
+
+            foreach($_SESSION['login_errors'] as $error)
+            {
+                echo "<p>$error</p>";
+            }
+
+            unset($_SESSION['login_errors']);
+
+        }
+        ?>
+
+    </div>
+
+
 
     <p>&nbsp;</p>
     <p><a href="includes/reset.php">DESTROY SESSION</a></p>

@@ -60,14 +60,11 @@ function register_user($post, $get_connection)
         $_SESSION['errors'][] = 'Your password must match your re-typed password.';
     }
 
-//    var_dump($_SESSION['errors']);
-//    die();
-
     // Display errors if $errors array is NOT null
     if($_SESSION['errors'] != NULL)
     {
 
-        header('Location: index.php');
+        header('Location: ../index.php');
     }
 
     // If no errors redirect to logged-in.php, input form fields into database, and
@@ -81,7 +78,6 @@ function register_user($post, $get_connection)
             // to session variables to echo on next page
             $_SESSION['first_name'] = $post['first_name'];
             $_SESSION['last_name'] = $post['last_name'];
-            $_SESSION['email'] = $post['email'];
 
             // Set variables to insert into MySQL queries
             $first_name_sec = mysqli_real_escape_string($get_connection, $post['first_name']);
@@ -105,10 +101,18 @@ function register_user($post, $get_connection)
 
 }
 
+
 // Function below checks if someone has already registered AND
 // passes in the $connect variable to connect to the database
 function login_user($post, $get_connection)
 {
+
+    // Create empty login_errors array, session variable
+    $_SESSION['login_errors'] = [];
+
+    // Create an empty login_success array to be use as a log in token on the
+    // that will show a success message on the logged-in.php page
+    $_SESSION['login_success'] = 'login_success';
 
     // Set variables to insert into MySQL queries
     $email_sec = mysqli_real_escape_string($get_connection, $post['email']);
@@ -119,6 +123,23 @@ function login_user($post, $get_connection)
 
     $check_email_password_query = "SELECT * FROM users WHERE users.email = '$email_sec' AND users.password = '$password_sec'";
 
+    // Try to grab the user with above credentials
+    $execute_check_email_password_query = fetch($check_email_password_query);
+
+    if(count($execute_check_email_password_query) > 0)
+    {
+        $_SESSION['first_name_login'] = $execute_check_email_password_query[0]['first_name'];
+        $_SESSION['last_name_login'] = $execute_check_email_password_query[0]['last_name'];
+        header('Location: ../logged-in.php');
+
+    }
+    else
+    {
+
+        $_SESSION['login_errors'][] = 'Your email/password combination was not found. Please try again.';
+        header('Location: ../index.php');
+
+    }
 
 }
 
