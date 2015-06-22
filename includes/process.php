@@ -83,14 +83,6 @@ function register_user($post, $get_connection)
             $_SESSION['last_name'] = $post['last_name'];
             $_SESSION['email'] = $post['email'];
 
-//            var_dump($get_connection);
-//            die();
-
-
-
-
-
-
             // Set variables to insert into MySQL queries
             $first_name_sec = mysqli_real_escape_string($get_connection, $post['first_name']);
             $last_name_sec = mysqli_real_escape_string($get_connection, $post['last_name']);
@@ -112,6 +104,7 @@ function register_user($post, $get_connection)
     }
 
 }
+
 
 // If registered form submitted call the register_user function with
 // $_POST as the argument AND pass in the $connection variable to run MySQL queries
